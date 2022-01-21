@@ -1,12 +1,13 @@
 <?php
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST');
+header("Access-Control-Allow-Headers: Content-Type");
+
 use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
 require 'vendor/autoload.php';
-
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: PUT, GET, POST, DELETE");
-header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
 
 $mail = new PHPMailer(true);
 $mail->CharSet = 'UTF-8';
@@ -55,7 +56,7 @@ try {
     $mail->SMTPAuth = true;
     $mail->Username = 'matheuscorona@mactechnology.com.br';
     $mail->Password = 'Maths@!2021';
-    $mail->SMTPSecure = 'ssl';
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
     $mail->Port = 465;
 
     //Recipients
@@ -68,10 +69,8 @@ try {
     $mail->Body = $bodyTemplate;
 
     $mail->send();
-    $response = 200;
+    echo json_encode(200);
 } catch (Exception $e) {
-    $response = $mail->ErrorInfo;
+    echo json_encode($mail->ErrorInfo);
 }
-
-echo json_encode($response);
 ?>
